@@ -5,6 +5,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PagerSnapHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -42,42 +46,56 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         this.setContentView(rootLayout);
     }
 
     private void renderIVG(int rootWidth, int rootHeight) {
         List<IvgContainerNw> result = makeData();
         for (IvgContainerNw container : result) {
-            FrameLayout containerView = addContainer(container, rootWidth, rootHeight);
-            for (final SectionNw section : container.getSections()) {
+            RecyclerView containerView = addContainer(container, rootWidth, rootHeight);
+            RvAdapter adapter = new RvAdapter(container.getSections());
+            containerView.setAdapter(adapter);
 
-                final FrameLayout sectionView = addSection(section, rootWidth, rootHeight, containerView);
-                sectionView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            sectionView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        }
-                        int sectionHeight = sectionView.getHeight(); //height is ready
-                        int sectionWidth = sectionView.getWidth(); //width is ready
-                        for (ItemNw item : section.getItems()) {
-                            addItem(item, sectionWidth, sectionHeight, sectionView);
-                        }
-                    }
-                });
-
-            }
+//            for (final SectionNw section : container.getSections()) {
+//
+//                final FrameLayout sectionView = addSection(section, rootWidth, rootHeight, containerView);
+//
+//                sectionView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//                    @Override
+//                    public void onGlobalLayout() {
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                            sectionView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                        }
+//                        int sectionHeight = sectionView.getHeight(); //height is ready
+//                        int sectionWidth = sectionView.getWidth(); //width is ready
+//                        for (ItemNw item : section.getItems()) {
+//                            addItem(item, sectionWidth, sectionHeight, sectionView);
+//                        }
+//                    }
+//                });
+//
+//            }
         }
     }
 
-    private FrameLayout addContainer(IvgContainerNw data, int sectionWidth, int sectionHeight) {
+    private RecyclerView addContainer(IvgContainerNw data, int sectionWidth, int sectionHeight) {
         //todo pixel to dp convert
         double hPerc = Integer.parseInt(data.getHeight());
         hPerc = hPerc / 100;
-        FrameLayout container = new FrameLayout(this);
+
+        RecyclerView container = new RecyclerView(this);
         container.setLayoutParams(new FrameLayout.LayoutParams(sectionWidth, (int) (sectionHeight * hPerc)));
+        container.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         container.setBackgroundColor(Color.parseColor(data.getBgColor()));
         container.setAlpha(Float.parseFloat(data.getAlpha()));
+
+        SnapToBlock snapToBlock = new SnapToBlock(1);
+        snapToBlock.attachToRecyclerView(container);
+
+
+
         rootLayout.addView(container);
         return container;
     }
@@ -98,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void addItem(ItemNw data, int sectionWidth, int sectionHeight, FrameLayout sectionView) {
+
         double hPerc = Integer.parseInt(data.getHeight());
         hPerc = hPerc / 100;
         double wPerc = Integer.parseInt(data.getWidth());
@@ -109,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
         yPerc = yPerc / 100;
 
         View item;
+
         if (data.getTypeCd().equalsIgnoreCase("Text-Static")) {
             item = new TextView(this);
             ((TextView) item).setText(data.getDescText());
@@ -143,6 +163,13 @@ public class MainActivity extends AppCompatActivity {
         sectionNw1.setAlpha("0.7");
         sectionNw1.setBgColor("#00cccc");
 
+        SectionNw sectionNw2 = new SectionNw();
+        sectionNw2.setHeight("80");
+        sectionNw2.setWidth("60");
+        sectionNw2.setAlpha("0.7");
+        sectionNw2.setBgColor("#0000cc");
+
+
         ItemNw itemNw1 = new ItemNw();
         itemNw1.setHeight("50");
         itemNw1.setWidth("50");
@@ -150,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         itemNw1.setyCoordinate("25");
         itemNw1.setTypeCd("Image");
         itemNw1.setAlpha("1");
-        itemNw1.setDescTextFontColor("#acacac");
+        itemNw1.setDescTextFontColor("000000");
 
         ItemNw itemNw2 = new ItemNw();
         itemNw2.setHeight("20");
@@ -167,9 +194,11 @@ public class MainActivity extends AppCompatActivity {
         itemNwList.add(itemNw2);
 
         sectionNw1.setItems(itemNwList);
+        sectionNw2.setItems(itemNwList);
 
         List<SectionNw> sectionNwList = new ArrayList<>();
         sectionNwList.add(sectionNw1);
+        sectionNwList.add(sectionNw2);
 
         ivgContainerNw.setSections(sectionNwList);
 
