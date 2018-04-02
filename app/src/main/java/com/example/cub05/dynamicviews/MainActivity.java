@@ -94,8 +94,6 @@ public class MainActivity extends AppCompatActivity {
         SnapToBlock snapToBlock = new SnapToBlock(1);
         snapToBlock.attachToRecyclerView(container);
 
-
-
         rootLayout.addView(container);
         return container;
     }
@@ -158,31 +156,48 @@ public class MainActivity extends AppCompatActivity {
         ivgContainerNw.setHeight("100");
 
         SectionNw sectionNw1 = new SectionNw();
-        sectionNw1.setHeight("90");
-        sectionNw1.setWidth("60");
-        sectionNw1.setAlpha("0.7");
-        sectionNw1.setBgColor("#00cccc");
+        sectionNw1.setHeight("100");
+        sectionNw1.setWidth("100");
+        sectionNw1.setAlpha("1");
+        sectionNw1.setBgColor("#00ccff");
 
         SectionNw sectionNw2 = new SectionNw();
-        sectionNw2.setHeight("80");
+        sectionNw2.setHeight("100");
         sectionNw2.setWidth("60");
-        sectionNw2.setAlpha("0.7");
-        sectionNw2.setBgColor("#0000cc");
+        sectionNw2.setAlpha("1");
+        sectionNw2.setBgColor("#ff00cc");
 
+        SectionNw sectionNw3 = new SectionNw();
+        sectionNw3.setHeight("100");
+        sectionNw3.setWidth("60");
+        sectionNw3.setAlpha("1");
+        sectionNw3.setBgColor("#ffcccc");
+
+        SectionNw sectionNw4 = new SectionNw();
+        sectionNw4.setHeight("100");
+        sectionNw4.setWidth("60");
+        sectionNw4.setAlpha("1");
+        sectionNw4.setBgColor("#fffccc");
+
+        SectionNw sectionNw5 = new SectionNw();
+        sectionNw5.setHeight("100");
+        sectionNw5.setWidth("60");
+        sectionNw5.setAlpha("1");
+        sectionNw5.setBgColor("#fccccc");
 
         ItemNw itemNw1 = new ItemNw();
-        itemNw1.setHeight("50");
-        itemNw1.setWidth("50");
-        itemNw1.setxCoordinate("25");
-        itemNw1.setyCoordinate("25");
+        itemNw1.setHeight("25");
+        itemNw1.setWidth("25");
+        itemNw1.setxCoordinate("0");
+        itemNw1.setyCoordinate("0");
         itemNw1.setTypeCd("Image");
         itemNw1.setAlpha("1");
-        itemNw1.setDescTextFontColor("000000");
+        itemNw1.setDescTextFontColor("#000000");
 
         ItemNw itemNw2 = new ItemNw();
         itemNw2.setHeight("20");
         itemNw2.setWidth("20");
-        itemNw2.setxCoordinate("25");
+        itemNw2.setxCoordinate("50");
         itemNw2.setyCoordinate("55");
         itemNw2.setTypeCd("Text-Static");
         itemNw2.setAlpha("1");
@@ -195,10 +210,16 @@ public class MainActivity extends AppCompatActivity {
 
         sectionNw1.setItems(itemNwList);
         sectionNw2.setItems(itemNwList);
+        sectionNw3.setItems(itemNwList);
+        sectionNw4.setItems(itemNwList);
+        sectionNw5.setItems(itemNwList);
 
         List<SectionNw> sectionNwList = new ArrayList<>();
         sectionNwList.add(sectionNw1);
         sectionNwList.add(sectionNw2);
+        sectionNwList.add(sectionNw3);
+        sectionNwList.add(sectionNw4);
+        sectionNwList.add(sectionNw5);
 
         ivgContainerNw.setSections(sectionNwList);
 
