@@ -16,6 +16,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.cub05.dynamicviews.Demo.ItemNw;
 import com.example.cub05.dynamicviews.Demo.IvgContainerNw;
 import com.example.cub05.dynamicviews.Demo.SectionNw;
@@ -45,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
                 renderIVG(rootWidth, rootHeight);
             }
         });
-
 
 
         this.setContentView(rootLayout);

@@ -1,7 +1,9 @@
 package com.example.cub05.dynamicviews;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,13 +12,21 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.cub05.dynamicviews.Demo.ItemNw;
 import com.example.cub05.dynamicviews.Demo.SectionNw;
 
 import java.util.List;
 import java.util.Random;
+
+import javax.sql.DataSource;
 
 /**
  * Created by cub01 on 3/29/2018.
@@ -33,13 +43,13 @@ public class RvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-
+        Log.e("test", "onCreateViewHolder");
         double hPerc = Integer.parseInt(data.get(viewType).getHeight());
         hPerc = hPerc / 100;
         double wPerc = Integer.parseInt(data.get(viewType).getWidth());
         wPerc = wPerc / 100;
 
-        FrameLayout section = new FrameLayout(parent.getContext());
+        final FrameLayout section = new FrameLayout(parent.getContext());
         section.setLayoutParams(new RecyclerView.LayoutParams((int) (parent.getWidth() * wPerc), (int) (parent.getHeight() * hPerc)));
         section.setBackgroundColor(Color.parseColor(data.get(viewType).getBgColor()));
         section.setAlpha(Float.parseFloat(data.get(viewType).getAlpha()));
@@ -48,7 +58,44 @@ public class RvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //            addItem(item, section.getWidth(), section.getHeight(), section);
 //        }
 
-        return new NewVh(section);
+        final NewVh holder = new NewVh(section);
+        final FrameLayout sectionLayout = ((FrameLayout) holder.itemView);
+
+        sectionLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                int width = sectionLayout.getWidth();
+                int height = sectionLayout.getHeight();
+                for (ItemNw item : data.get(holder.getAdapterPosition()).getItems()) {
+                    Random random = new Random();
+                    int a = random.nextInt(10);
+                    addItem(item, width, height, sectionLayout, a, a + 3);
+                }
+            }
+        });
+
+//        sectionLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//
+////                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+////                    sectionLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+////                }
+//                int width = sectionLayout.getWidth();
+//                int height = sectionLayout.getHeight();
+//                for (ItemNw item : data.get(holder.getAdapterPosition()).getItems()) {
+//                    Random random = new Random();
+//                    int a = random.nextInt(10);
+//                    addItem(item, width, height, sectionLayout, a, a + 3);
+//                }
+//
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                    sectionLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                }
+//            }
+//        });
+
+        return holder;
     }
 
     private void addItem(ItemNw item, int sectionWidth, int sectionHeight, FrameLayout section, int sx, int sy) {
@@ -73,7 +120,32 @@ public class RvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((TextView) itemView).setTextColor(Color.parseColor(item.getDescTextFontColor()));
         } else if (item.getTypeCd().equalsIgnoreCase("Image")) {
             itemView = new ImageView(section.getContext());
-            ((ImageView) itemView).setImageDrawable(ContextCompat.getDrawable(section.getContext(), R.drawable.ic_launcher_foreground));
+//            String imgUrl = "www.effigis.com/wp-content/uploads/2015/02/Airbus_Pleiades_50cm_8bit_RGB_Yogyakarta.jpg";
+////            String imgUrl = "http://goo.gl/gEgYUd";
+//
+//            Glide.with(section.getContext()).load(imgUrl).into((ImageView) itemView);
+
+//            ((ImageView) itemView).setImageDrawable(ContextCompat.getDrawable(section.getContext(), R.drawable.));
+            ((ImageView) itemView).setImageResource(R.mipmap.test);
+
+//            final ProgressBar progressBar = new ProgressBar(section.getContext());
+//
+//            Glide.with(section.getContext())
+//                    .load("http://www.sample-videos.com/img/Sample-jpg-image-30mb.jpg")
+//                    .listener(new RequestListener<String, GlideDrawable>() {
+//                        @Override
+//                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+//                            progressBar.setVisibility(View.GONE);
+//                            return false;
+//                        }
+//
+//                        @Override
+//                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+//                            progressBar.setVisibility(View.GONE);
+//                            return false;
+//                        }
+//                    })
+//                    .into((ImageView) itemView);
         } else {
             itemView = new FrameLayout(section.getContext());
             itemView.setBackgroundColor(Color.parseColor(item.getDescTextFontColor()));
@@ -90,34 +162,36 @@ public class RvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-//        Vh dataVH = (Vh) holder;
-//        dataVH.bind(data.get(position).getItems());
-        ((FrameLayout) holder.itemView).removeAllViews();
-        final FrameLayout section = ((FrameLayout) holder.itemView);
-        section.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
+        Log.e("test", "onBindViewHolder");
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    section.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
-                int width = section.getWidth();
-                int height = section.getHeight();
-                for (ItemNw item : data.get(holder.getAdapterPosition()).getItems()) {
-                    Random random = new Random();
-                    int a = random.nextInt(10);
-                    addItem(item, width, height, section, a, a + 3);
-                }
-            }
-        });
-
-//        int width = 1000;
-//        int height = 1500;
-//        for (ItemNw item : data.get(holder.getAdapterPosition()).getItems()) {
-//            Random random = new Random();
-//            int a = random.nextInt(10);
-//            addItem(item, width, height, section, a, a + 3);
-//        }
+////        Vh dataVH = (Vh) holder;
+////        dataVH.bind(data.get(position).getItems());
+//        ((FrameLayout) holder.itemView).removeAllViews();
+//        final FrameLayout section = ((FrameLayout) holder.itemView);
+//        section.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                    section.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                }
+//                int width = section.getWidth();
+//                int height = section.getHeight();
+//                for (ItemNw item : data.get(holder.getAdapterPosition()).getItems()) {
+//                    Random random = new Random();
+//                    int a = random.nextInt(10);
+//                    addItem(item, width, height, section, a, a + 3);
+//                }
+//            }
+//        });
+//
+////        int width = 1000;
+////        int height = 1500;
+////        for (ItemNw item : data.get(holder.getAdapterPosition()).getItems()) {
+////            Random random = new Random();
+////            int a = random.nextInt(10);
+////            addItem(item, width, height, section, a, a + 3);
+////        }
 
     }
 
