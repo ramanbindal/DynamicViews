@@ -1,29 +1,25 @@
 package com.example.cub05.dynamicviews;
 
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.cub05.dynamicviews.Demo.ContainerAdapter;
 import com.example.cub05.dynamicviews.Demo.ItemNw;
 import com.example.cub05.dynamicviews.Demo.IvgContainerNw;
 import com.example.cub05.dynamicviews.Demo.SectionNw;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,53 +28,77 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        rootLayout = new FrameLayout(this);
-        rootLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        rootLayout.setBackgroundColor(Color.YELLOW);
 
-        rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//        rootLayout = new FrameLayout(this);
+//        rootLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//        rootLayout.setBackgroundColor(Color.YELLOW);
+//
+//        rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                    rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                }
+//                int rootHeight = rootLayout.getHeight(); //height is ready
+//                int rootWidth = rootLayout.getWidth(); //width is ready
+//                renderIVG(rootWidth, rootHeight);
+//            }
+//        });
+
+
+        this.setContentView(renderIVG());
+    }
+
+    private RecyclerView renderIVG() {
+        final List<IvgContainerNw> result = makeData();
+        final RecyclerView outerContainer = new RecyclerView(this);
+        outerContainer.setLayoutParams(new  ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        outerContainer.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+        outerContainer.setBackgroundColor(Color.BLUE);
+
+        //        SnapToBlock snapToBlock = new SnapToBlock(1);
+//        snapToBlock.attachToRecyclerView(outerContainer);
+//        rootLayout.addView(outerContainer);
+        outerContainer.post(new Runnable() {
             @Override
-            public void onGlobalLayout() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
-                int rootHeight = rootLayout.getHeight(); //height is ready
-                int rootWidth = rootLayout.getWidth(); //width is ready
-                renderIVG(rootWidth, rootHeight);
+            public void run() {
+                int width = outerContainer.getWidth();
+                int height = outerContainer.getHeight();
+                ContainerAdapter containerAdapter = new ContainerAdapter(result, width, height);
+                outerContainer.setAdapter(containerAdapter);
+
             }
         });
 
 
-        this.setContentView(rootLayout);
-    }
 
-    private void renderIVG(int rootWidth, int rootHeight) {
-        List<IvgContainerNw> result = makeData();
-        for (IvgContainerNw container : result) {
-            RecyclerView containerView = addContainer(container, rootWidth, rootHeight);
-            RvAdapter adapter = new RvAdapter(container.getSections());
-            containerView.setAdapter(adapter);
+        return outerContainer;
 
-//            for (final SectionNw section : container.getSections()) {
+//        for (IvgContainerNw container : result) {
+//            RecyclerView containerView = addContainer(container, rootWidth, rootHeight);
+//            SectionAdapter adapter = new SectionAdapter(container.getSections());
+//            containerView.setAdapter(adapter);
 //
-//                final FrameLayout sectionView = addSection(section, rootWidth, rootHeight, containerView);
-//
-//                sectionView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//                    @Override
-//                    public void onGlobalLayout() {
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                            sectionView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//                        }
-//                        int sectionHeight = sectionView.getHeight(); //height is ready
-//                        int sectionWidth = sectionView.getWidth(); //width is ready
-//                        for (ItemNw item : section.getItems()) {
-//                            addItem(item, sectionWidth, sectionHeight, sectionView);
-//                        }
-//                    }
-//                });
-//
-//            }
-        }
+////            for (final SectionNw section : container.getSections()) {
+////
+////                final FrameLayout sectionView = addSection(section, rootWidth, rootHeight, containerView);
+////
+////                sectionView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+////                    @Override
+////                    public void onGlobalLayout() {
+////                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+////                            sectionView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+////                        }
+////                        int sectionHeight = sectionView.getHeight(); //height is ready
+////                        int sectionWidth = sectionView.getWidth(); //width is ready
+////                        for (ItemNw item : section.getItems()) {
+////                            addItem(item, sectionWidth, sectionHeight, sectionView);
+////                        }
+////                    }
+////                });
+////
+////            }
+//        }
     }
 
     private RecyclerView addContainer(IvgContainerNw data, int sectionWidth, int sectionHeight) {
@@ -154,7 +174,14 @@ public class MainActivity extends AppCompatActivity {
         ivgContainerNw.setTypeCd("page_view");
         ivgContainerNw.setAlpha("1");
         ivgContainerNw.setBgColor("#ccefff");
-        ivgContainerNw.setHeight("100");
+        ivgContainerNw.setHeight("50");
+
+        IvgContainerNw ivgContainerNw2 = new IvgContainerNw();
+        ivgContainerNw2.setTypeCd("page_view");
+        ivgContainerNw2.setAlpha("1");
+        ivgContainerNw2.setBgColor("#ccefff");
+        ivgContainerNw2.setHeight("50");
+
 
         SectionNw sectionNw1 = new SectionNw();
         sectionNw1.setHeight("100");
@@ -223,8 +250,11 @@ public class MainActivity extends AppCompatActivity {
         sectionNwList.add(sectionNw5);
 
         ivgContainerNw.setSections(sectionNwList);
+        ivgContainerNw2.setSections(sectionNwList);
 
         ivgContainerNwList.add(ivgContainerNw);
+        ivgContainerNwList.add(ivgContainerNw2);
+
         return ivgContainerNwList;
     }
 

@@ -68,7 +68,7 @@ public class SnapToBlock extends SnapHelper {
         }
     };
 
-    SnapToBlock(int maxFlingBlocks) {
+    public SnapToBlock(int maxFlingBlocks) {
         super();
         mMaxFlingBlocks = maxFlingBlocks;
     }

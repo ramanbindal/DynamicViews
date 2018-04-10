@@ -32,11 +32,11 @@ import javax.sql.DataSource;
  * Created by cub01 on 3/29/2018.
  */
 
-public class RvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     List<SectionNw> data;
 
-    public RvAdapter(List<SectionNw> sections) {
+    public SectionAdapter(List<SectionNw> sections) {
         this.data = sections;
     }
 
