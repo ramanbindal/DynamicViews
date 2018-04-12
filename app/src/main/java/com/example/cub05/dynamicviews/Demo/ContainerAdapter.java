@@ -3,6 +3,7 @@ package com.example.cub05.dynamicviews.Demo;
 import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -32,6 +33,7 @@ public class ContainerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         double hPerc = Integer.parseInt(data.get(viewType).getHeight());
         hPerc = hPerc / 100;
+        Log.e("container adapter", "VIEW TYPE here " + viewType);
 
         RecyclerView container = new RecyclerView(parent.getContext());
         container.setLayoutParams(new RecyclerView.LayoutParams(rootWidth, (int) (rootHeight * hPerc)));
@@ -42,38 +44,37 @@ public class ContainerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 //        SnapToBlock snapToBlock = new SnapToBlock(1);
 //        snapToBlock.attachToRecyclerView(container);
 
-        SectionAdapter adapter = new SectionAdapter(data.get(viewType).getSections());
-        container.setAdapter(adapter);
-//        View line = new View(parent.getContext());
-//        line.setLayoutParams(new RecyclerView.LayoutParams(rootWidth, 5));
-//        line.setBackgroundColor(Color.BLACK);
-//        container.addView(line);
+//
+//        SectionAdapter adapter = new SectionAdapter(data.get(viewType).getSections());
+//        container.setAdapter(adapter);
+
 
         return new NewVh(container);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        Log.e("container adapter", "onBindViewHolder");
 
+        SectionAdapter adapter = new SectionAdapter(data.get(position).getSections());
+        ((RecyclerView) holder.itemView).setAdapter(adapter);
     }
 
     @Override
     public int getItemViewType(int position) {
-//        if (position % 2 == 0)
-//            return 1;
-//        else
-            return 0;
+        return position;
     }
 
     @Override
     public int getItemCount() {
-        return 21;
+        return data.size();
     }
 
     public class NewVh extends RecyclerView.ViewHolder {
 
         public NewVh(View itemView) {
             super(itemView);
+
         }
 
 

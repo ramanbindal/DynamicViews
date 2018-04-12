@@ -43,13 +43,14 @@ public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        Log.e("test", "onCreateViewHolder");
+        Log.e("SectionAdapter", "onCreateViewHolder "+viewType);
+
         double hPerc = Integer.parseInt(data.get(viewType).getHeight());
         hPerc = hPerc / 100;
         double wPerc = Integer.parseInt(data.get(viewType).getWidth());
         wPerc = wPerc / 100;
 
-        final FrameLayout section = new FrameLayout(parent.getContext());
+        FrameLayout section = new FrameLayout(parent.getContext());
         section.setLayoutParams(new RecyclerView.LayoutParams((int) (parent.getWidth() * wPerc), (int) (parent.getHeight() * hPerc)));
         section.setBackgroundColor(Color.parseColor(data.get(viewType).getBgColor()));
         section.setAlpha(Float.parseFloat(data.get(viewType).getAlpha()));
@@ -115,7 +116,6 @@ public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (item.getTypeCd().equalsIgnoreCase("Text-Static")) {
             itemView = new TextView(section.getContext());
             ((TextView) itemView).setText(item.getDescText());
-            ((TextView) itemView).setBackgroundColor(Color.BLACK);
 
             ((TextView) itemView).setTextColor(Color.parseColor(item.getDescTextFontColor()));
         } else if (item.getTypeCd().equalsIgnoreCase("Image")) {
@@ -156,13 +156,13 @@ public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         itemView.setX((float) (xPerc * sectionWidth) + sx);
         itemView.setY((float) (yPerc * sectionHeight) + sy);
         itemView.setTag("item");
-        Log.e("test", itemView.toString());
+//        Log.e("test", itemView.toString());
         section.addView(itemView);
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        Log.e("test", "onBindViewHolder");
+        Log.e("SectionAdapter", "onBindViewHolder");
 
 ////        Vh dataVH = (Vh) holder;
 ////        dataVH.bind(data.get(position).getItems());
