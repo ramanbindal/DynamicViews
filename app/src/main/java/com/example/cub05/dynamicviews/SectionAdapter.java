@@ -1,32 +1,20 @@
 package com.example.cub05.dynamicviews;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.cub05.dynamicviews.Demo.ItemNw;
 import com.example.cub05.dynamicviews.Demo.SectionNw;
 
 import java.util.List;
 import java.util.Random;
-
-import javax.sql.DataSource;
 
 /**
  * Created by cub01 on 3/29/2018.
@@ -43,13 +31,14 @@ public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        Log.e("test", "onCreateViewHolder");
+        Log.e("test", "onCreateViewHolder " + data.size());
+        Log.e("test", "data element " + viewType);
         double hPerc = Integer.parseInt(data.get(viewType).getHeight());
         hPerc = hPerc / 100;
         double wPerc = Integer.parseInt(data.get(viewType).getWidth());
         wPerc = wPerc / 100;
 
-        final FrameLayout section = new FrameLayout(parent.getContext());
+        FrameLayout section = new FrameLayout(parent.getContext());
         section.setLayoutParams(new RecyclerView.LayoutParams((int) (parent.getWidth() * wPerc), (int) (parent.getHeight() * hPerc)));
         section.setBackgroundColor(Color.parseColor(data.get(viewType).getBgColor()));
         section.setAlpha(Float.parseFloat(data.get(viewType).getAlpha()));

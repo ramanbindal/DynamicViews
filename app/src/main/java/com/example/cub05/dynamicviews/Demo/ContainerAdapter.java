@@ -5,10 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.example.cub05.dynamicviews.SectionAdapter;
-import com.example.cub05.dynamicviews.SnapToBlock;
 
 import java.util.List;
 
@@ -59,10 +57,7 @@ public class ContainerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-//        if (position % 2 == 0)
-//            return 1;
-//        else
-            return 0;
+        return position;
     }
 
     @Override
