@@ -1,20 +1,33 @@
 package com.example.cub05.dynamicviews;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.example.cub05.dynamicviews.Demo.ContainerAdapter;
 import com.example.cub05.dynamicviews.Demo.ItemNw;
 import com.example.cub05.dynamicviews.Demo.SectionNw;
 
 import java.util.List;
 import java.util.Random;
+
+import javax.sql.DataSource;
 
 /**
  * Created by cub01 on 3/29/2018.
@@ -31,8 +44,8 @@ public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        Log.e("test", "onCreateViewHolder " + data.size());
-        Log.e("test", "data element " + viewType);
+        Log.e("SectionAdapter", "onCreateViewHolder " + viewType);
+
         double hPerc = Integer.parseInt(data.get(viewType).getHeight());
         hPerc = hPerc / 100;
         double wPerc = Integer.parseInt(data.get(viewType).getWidth());
@@ -49,7 +62,7 @@ public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         final NewVh holder = new NewVh(section);
         final FrameLayout sectionLayout = ((FrameLayout) holder.itemView);
-
+        holder.setIsRecyclable(false);
         sectionLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -87,6 +100,7 @@ public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return holder;
     }
 
+
     private void addItem(ItemNw item, int sectionWidth, int sectionHeight, FrameLayout section, int sx, int sy) {
 
         double hPerc = Integer.parseInt(item.getHeight());
@@ -104,7 +118,6 @@ public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (item.getTypeCd().equalsIgnoreCase("Text-Static")) {
             itemView = new TextView(section.getContext());
             ((TextView) itemView).setText(item.getDescText());
-            ((TextView) itemView).setBackgroundColor(Color.BLACK);
 
             ((TextView) itemView).setTextColor(Color.parseColor(item.getDescTextFontColor()));
         } else if (item.getTypeCd().equalsIgnoreCase("Image")) {
@@ -145,13 +158,13 @@ public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         itemView.setX((float) (xPerc * sectionWidth) + sx);
         itemView.setY((float) (yPerc * sectionHeight) + sy);
         itemView.setTag("item");
-        Log.e("test", itemView.toString());
+//        Log.e("test", itemView.toString());
         section.addView(itemView);
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        Log.e("test", "onBindViewHolder");
+        Log.e("SectionAdapter", "onBindViewHolder");
 
 ////        Vh dataVH = (Vh) holder;
 ////        dataVH.bind(data.get(position).getItems());
@@ -236,8 +249,16 @@ public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public NewVh(View itemView) {
             super(itemView);
         }
-
-
     }
+
+    @Override
+    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+        ViewGroup itemView = ((ViewGroup) holder.itemView);
+        Log.e("testing", "child count before " + itemView.getChildCount());
+        itemView.removeAllViews();
+        Log.e("testing", "child count after " + itemView.getChildCount());
+        super.onViewDetachedFromWindow(holder);
+    }
+
 
 }

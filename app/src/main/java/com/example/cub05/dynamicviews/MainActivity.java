@@ -25,6 +25,10 @@ public class MainActivity extends AppCompatActivity {
 
     FrameLayout rootLayout;
 
+    int MAX_CONTAINER = 20;
+    int MAX_SECTION = 15;
+    int MAX_SECTION_ITEM = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +56,12 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView renderIVG() {
         final List<IvgContainerNw> result = makeData();
         final RecyclerView outerContainer = new RecyclerView(this);
-        outerContainer.setLayoutParams(new  ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        outerContainer.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         outerContainer.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         outerContainer.setBackgroundColor(Color.BLUE);
+
+        outerContainer.getRecycledViewPool().clear();
+
 
         //        SnapToBlock snapToBlock = new SnapToBlock(1);
 //        snapToBlock.attachToRecyclerView(outerContainer);
@@ -69,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
 
 
         return outerContainer;
@@ -168,92 +174,58 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public List<IvgContainerNw> makeData() {
-        List<IvgContainerNw> ivgContainerNwList = new ArrayList<>();
-        IvgContainerNw ivgContainerNw = new IvgContainerNw();
-        ivgContainerNw.setTypeCd("page_view");
-        ivgContainerNw.setAlpha("1");
-        ivgContainerNw.setBgColor("#ccefff");
-        ivgContainerNw.setHeight("50");
-
-        IvgContainerNw ivgContainerNw2 = new IvgContainerNw();
-        ivgContainerNw2.setTypeCd("page_view");
-        ivgContainerNw2.setAlpha("1");
-        ivgContainerNw2.setBgColor("#ccefff");
-        ivgContainerNw2.setHeight("50");
-
-
-        SectionNw sectionNw1 = new SectionNw();
-        sectionNw1.setHeight("100");
-        sectionNw1.setWidth("100");
-        sectionNw1.setAlpha("1");
-        sectionNw1.setBgColor("#00ccff");
-
-        SectionNw sectionNw2 = new SectionNw();
-        sectionNw2.setHeight("100");
-        sectionNw2.setWidth("60");
-        sectionNw2.setAlpha("1");
-        sectionNw2.setBgColor("#ff00cc");
-
-        SectionNw sectionNw3 = new SectionNw();
-        sectionNw3.setHeight("100");
-        sectionNw3.setWidth("60");
-        sectionNw3.setAlpha("1");
-        sectionNw3.setBgColor("#ffcccc");
-
-        SectionNw sectionNw4 = new SectionNw();
-        sectionNw4.setHeight("100");
-        sectionNw4.setWidth("60");
-        sectionNw4.setAlpha("1");
-        sectionNw4.setBgColor("#fffccc");
-
-        SectionNw sectionNw5 = new SectionNw();
-        sectionNw5.setHeight("100");
-        sectionNw5.setWidth("60");
-        sectionNw5.setAlpha("1");
-        sectionNw5.setBgColor("#fccccc");
-
-        ItemNw itemNw1 = new ItemNw();
-        itemNw1.setHeight("25");
-        itemNw1.setWidth("25");
-        itemNw1.setxCoordinate("0");
-        itemNw1.setyCoordinate("0");
-        itemNw1.setTypeCd("Image");
-        itemNw1.setAlpha("1");
-        itemNw1.setDescTextFontColor("#000000");
-
+    private ItemNw makeSectionItem(int i, int j, int k) {
         ItemNw itemNw2 = new ItemNw();
         itemNw2.setHeight("20");
         itemNw2.setWidth("20");
-        itemNw2.setxCoordinate("50");
-        itemNw2.setyCoordinate("55");
-        itemNw2.setTypeCd("Text-Static");
+        itemNw2.setxCoordinate(k % 2 == 0 ? "50" : "80");
+        itemNw2.setyCoordinate(k % 2 == 0 ? "55" : "30");
+        itemNw2.setTypeCd(k % 2 == 0 ? "Text-Static" : "Image");
         itemNw2.setAlpha("1");
         itemNw2.setDescTextFontColor("#000000");
-        itemNw2.setDescText("Hello World");
+        itemNw2.setDescText("Hello World " + i + " " + j + " " + k);
+        return itemNw2;
+    }
+
+    private SectionNw makeSection(int i, int j) {
+        SectionNw sectionNw2 = new SectionNw();
+        sectionNw2.setHeight("100");
+        sectionNw2.setWidth("100");
+        sectionNw2.setAlpha("1");
+        sectionNw2.setBgColor(j % 2 == 0 && i % 2 == 0 ? "#ff00cc" : "#ff0000");
 
         List<ItemNw> itemNwList = new ArrayList<>();
-        itemNwList.add(itemNw1);
-        itemNwList.add(itemNw2);
+        for (int k = 0; k < MAX_SECTION_ITEM; k++) {
+            itemNwList.add(makeSectionItem(i, j, k));
+        }
 
-        sectionNw1.setItems(itemNwList);
         sectionNw2.setItems(itemNwList);
-        sectionNw3.setItems(itemNwList);
-        sectionNw4.setItems(itemNwList);
-        sectionNw5.setItems(itemNwList);
+        return sectionNw2;
+    }
+
+    private IvgContainerNw makeContainer(int i) {
+        IvgContainerNw ivgContainerNw = new IvgContainerNw();
+        ivgContainerNw.setTypeCd("page_view");
+        ivgContainerNw.setAlpha("1");
+        ivgContainerNw.setBgColor(i % 2 == 0 ? "#ccefff" : "#dfdfdf");
+        ivgContainerNw.setHeight(i % 2 == 1 ? "100" : "70");
 
         List<SectionNw> sectionNwList = new ArrayList<>();
-        sectionNwList.add(sectionNw1);
-        sectionNwList.add(sectionNw2);
-        sectionNwList.add(sectionNw3);
-        sectionNwList.add(sectionNw4);
-        sectionNwList.add(sectionNw5);
 
+        for (int j = 0; j < MAX_SECTION; j++) {
+            sectionNwList.add(makeSection(i, j));
+        }
         ivgContainerNw.setSections(sectionNwList);
-        ivgContainerNw2.setSections(sectionNwList);
 
-        ivgContainerNwList.add(ivgContainerNw);
-        ivgContainerNwList.add(ivgContainerNw2);
+        return ivgContainerNw;
+    }
+
+    public List<IvgContainerNw> makeData() {
+        List<IvgContainerNw> ivgContainerNwList = new ArrayList<>();
+
+        for (int i = 0; i < MAX_CONTAINER; i++) {
+            ivgContainerNwList.add(makeContainer(i));
+        }
 
         return ivgContainerNwList;
     }
