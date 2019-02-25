@@ -9,56 +9,22 @@ import com.google.gson.annotations.SerializedName;
 
 public class ItemNw {
 
-    @SerializedName("id")
-    @Expose
     private long id;
-    @SerializedName("name")
-    @Expose
     private String name;
-    @SerializedName("type_cd")
-    @Expose
     private String typeCd;
-    @SerializedName("width")
-    @Expose
     private String width;
-    @SerializedName("height")
-    @Expose
     private String height;
-    @SerializedName("x_coordinate")
-    @Expose
     private String xCoordinate;
-    @SerializedName("y_coordinate")
-    @Expose
     private String yCoordinate;
-    @SerializedName("alpha")
-    @Expose
     private String alpha;
-    @SerializedName("att_id")
-    @Expose
     private long attId;
-    @SerializedName("desc_text")
-    @Expose
     private String descText;
-    @SerializedName("desc_text_font_name")
-    @Expose
     private String descTextFontName;
-    @SerializedName("desc_text_font_style")
-    @Expose
     private String descTextFontStyle;
-    @SerializedName("desc_text_font_size")
-    @Expose
     private String descTextFontSize;
-    @SerializedName("desc_text_font_color")
-    @Expose
     private String descTextFontColor;
-    @SerializedName("seq_num")
-    @Expose
     private Integer seqNum;
-    @SerializedName("demo_group_dtl_id")
-    @Expose
     private long demoGroupDtlId;
-    @SerializedName("thumbnail_att_id")
-    @Expose
     private long thumbnailAttId;
 
     /**
@@ -68,26 +34,6 @@ public class ItemNw {
     public ItemNw() {
     }
 
-    /**
-     *
-     * @param demoGroupDtlId
-     * @param seqNum
-     * @param descTextFontColor
-     * @param width
-     * @param thumbnailAttId
-     * @param attId
-     * @param id
-     * @param yCoordinate
-     * @param height
-     * @param descText
-     * @param name
-     * @param alpha
-     * @param descTextFontSize
-     * @param descTextFontStyle
-     * @param descTextFontName
-     * @param typeCd
-     * @param xCoordinate
-     */
     public ItemNw(long id, String name, String typeCd, String width, String height, String xCoordinate, String yCoordinate, String alpha, long attId, String descText, String descTextFontName, String descTextFontStyle, String descTextFontSize, String descTextFontColor, Integer seqNum, long demoGroupDtlId, long thumbnailAttId) {
         this.id = id;
         this.name = name;

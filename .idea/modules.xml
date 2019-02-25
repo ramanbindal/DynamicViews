@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/DynamicViews.iml" filepath="$PROJECT_DIR$/.idea/DynamicViews.iml" />
-      <module fileurl="file://C:\Users\cub01\AndroidStudioProjects\DynamicViews\DynamicViews.iml" filepath="C:\Users\cub01\AndroidStudioProjects\DynamicViews\DynamicViews.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DynamicViews.iml" filepath="$PROJECT_DIR$/DynamicViews.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

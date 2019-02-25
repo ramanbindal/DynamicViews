@@ -11,27 +11,13 @@ import java.util.List;
 
 public class IvgContainerNw {
 
-    @SerializedName("id")
-    @Expose
     private long id;
-    @SerializedName("type_cd")
-    @Expose
     private String typeCd;
-    @SerializedName("height")
-    @Expose
     private String height;
-    @SerializedName("bg_color")
-    @Expose
     private String bgColor;
-    @SerializedName("alpha")
-    @Expose
     private String alpha;
-    @SerializedName("par_id")
     private long parId;
-    @SerializedName("demo_id")
     private long demoId;
-    @SerializedName("sections")
-    @Expose
     private List<SectionNw> sections = null;
 
     /**
@@ -39,16 +25,6 @@ public class IvgContainerNw {
      */
     public IvgContainerNw() {
     }
-
-    /**
-     * @param bgColor
-     * @param id
-     * @param sections
-     * @param height
-     * @param alpha
-     * @param typeCd
-     * @param parId
-     */
     public IvgContainerNw(long id, String typeCd, String height, String bgColor, String alpha, long parId, List<SectionNw> sections) {
         this.id = id;
         this.typeCd = typeCd;

@@ -11,32 +11,14 @@ import java.util.List;
 
 public class SectionNw {
 
-    @SerializedName("id")
-    @Expose
     private long id;
-    @SerializedName("height")
-    @Expose
     private String height;
-    @SerializedName("width")
-    @Expose
     private String width;
-    @SerializedName("alpha")
-    @Expose
     private String alpha;
-    @SerializedName("seq_num")
-    @Expose
     private Integer seqNum;
-    @SerializedName("bg_color")
-    @Expose
     private String bgColor;
-    @SerializedName("container_id")
-    @Expose
     private long containerId;
-    @SerializedName("demo_group_id")
-    @Expose
     private long demoGroupId;
-    @SerializedName("items")
-    @Expose
     private List<ItemNw> items = null;
 
     /**
@@ -45,17 +27,6 @@ public class SectionNw {
     public SectionNw() {
     }
 
-    /**
-     * @param bgColor
-     * @param seqNum
-     * @param id
-     * @param height
-     * @param items
-     * @param alpha
-     * @param width
-     * @param demoGroupId
-     * @param containerId
-     */
     public SectionNw(long id, String height, String width, String alpha, Integer seqNum, String bgColor, long containerId, long demoGroupId, List<ItemNw> items) {
         this.id = id;
         this.height = height;
